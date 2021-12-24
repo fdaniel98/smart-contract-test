@@ -1,0 +1,22 @@
+[
+  {
+    "name": "BNB",
+    "icon": "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Binance-Coin-BNB-icon.png"
+  },
+  {
+    "name": "USDT",
+    "icon": "https://cryptologos.cc/logos/tether-usdt-logo.png"
+  },
+  {
+    "name": "ETH",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"
+  },
+  {
+    "name": "USDC",
+    "icon": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389"
+  },
+  {
+    "name": "BUSD",
+    "icon": "https://cdn.coinranking.com/6SJHRfClq/busd.svg?size=48x48"
+  }
+]
