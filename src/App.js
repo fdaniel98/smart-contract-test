@@ -96,16 +96,18 @@ const App = () => {
             Smart contract practice
           </Text>
         </Box>
-        <Box p="8">
-          <Stack>
-            <Text>
-              Connected on: <strong>{chain}</strong>
-            </Text>
-            <Text>
-              Account: <strong>{account}</strong>
-            </Text>
-          </Stack>
-        </Box>
+        {window.ethereum?.isConnected() && (
+          <Box p="8">
+            <Stack>
+              <Text>
+                Connected on: <strong>{chain}</strong>
+              </Text>
+              <Text>
+                Account: <strong>{account}</strong>
+              </Text>
+            </Stack>
+          </Box>
+        )}
       </Flex>
       {provider ? (
         <>
