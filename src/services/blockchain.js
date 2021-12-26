@@ -1,13 +1,41 @@
-import web3 from "web3";
-import HelloWorldJson from "../blockchain/build/contracts/HelloWorld.json";
-const contractABI = HelloWorldJson.abi;
-const address = "0x2460Ba66AD2cA020e36d062c79235E1d8D369c49";
+import { ethers } from "ethers";
+import SimpleStorage from "../blockchain/build/contracts/SimpleStorage.json";
+const contractABI = SimpleStorage.abi;
+const address = "0xba136Be8D8c9BCC1292F4f3Dc8C0899C57c571bD";
 
-const webEth = new web3("HTTP://127.0.0.1:7545");
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
 
-const HelloWorldContract = new webEth.eth.Contract(contractABI, address);
+const SimpleStorageContract = new ethers.Contract(address, contractABI, signer);
 
-const sayHelloWorld = async () => HelloWorldContract.methods.say().call();
-const setData = async (from, data) => HelloWorldContract.methods.set(data).send({ from });
-const getIndexWallet = (index) => webEth.eth.getAccounts().then((result) => result[index]);
-export { setData, sayHelloWorld, getIndexWallet };
+const fundMe = async (value, callback) => {
+  const tx = await SimpleStorageContract.fundMe({
+    value: ethers.utils.parseEther(value.toString()),
+  });
+
+  const txConfirm = await provider.getTransaction(tx.hash);
+  callback(txConfirm);
+
+  return tx.wait();
+};
+
+const withdraw = async (callback) => {
+  const tx = await SimpleStorageContract.withdraw();
+  const txConfirm = await provider.getTransaction(tx.hash);
+
+  callback(txConfirm);
+
+  return tx.wait();
+};
+
+const getTotal = async () => {
+  const res = await SimpleStorageContract.getTotal();
+  return ethers.utils.formatEther(res);
+};
+
+const getETHPrice = async () => {
+  const res = await SimpleStorageContract.getUSDConversion();
+  return res.toString();
+};
+
+export { fundMe, getTotal, getETHPrice, withdraw };

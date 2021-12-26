@@ -1,7 +1,8 @@
 import {
   Box,
+  Button,
   Flex,
-  Spacer,
+  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -9,79 +10,143 @@ import {
   Tabs,
   Text
 } from "@chakra-ui/react";
+import detectEthereumProvider from "@metamask/detect-provider";
 import { useEffect, useState } from "react";
 import "./App.css";
-import Exchange from "./exchange/Exchange";
-import { getIndexWallet, sayHelloWorld, setData } from "./services/blockchain";
+import CHAINS from "./blockchain/chains/chains.json";
+import Fundme from "./tabs/fundme/Fundme";
+import Swap from "./tabs/swap/Swap";
+import Withdraw from "./tabs/withdraw/Withdraw";
 
-function App() {
-  const [word, setWord] = useState("");
+const App = () => {
+  const [loading, setLoading] = useState(true);
+  const [isConnected, setConnected] = useState(false);
+  const [provider, setProvider] = useState(null);
+  const [chain, setChain] = useState(null);
+  const [account, setAccount] = useState(null);
 
-  const sayHello = async () => {
-    const res = await sayHelloWorld();
-    setWord(res);
+  const connectToMetamask = () => {
+    window.ethereum.request({ method: "eth_requestAccounts" });
   };
 
-  const setTest = async () => {
-    const wallet = await getIndexWallet(0);
-    const res = await setData(wallet, 'nueva-transaccion');
+  const onConnect = () => {
+    window.ethereum.on("connect", (info) => {
+      console.log("ON CONNECT");
+      setChain(CHAINS[info.chainId]);
+      setConnected(window.ethereum.isConnected());
+    });
+  };
+
+  const onDisconnect = () => {
+    window.ethereum.on("disconnect", (error) => {
+      console.log("ERROR..", error);
+      console.log("ON DISCONNECT");
+    });
+  };
+
+  const checkChain = async () => {
+    window.ethereum.on("chainChanged", (chainId) => {
+      console.log("CHAIN...", window.chain);
+      window.location.reload();
+    });
+  };
+
+  const onChangeAccount = async () => {
+    window.ethereum.on("accountsChanged", (accounts) => {
+      setAccount(accounts[0]);
+      console.log("ACCOUNTS...", accounts);
+    });
+  };
+
+  const getAccount = async () => {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    setAccount(accounts[0]);
+    setLoading(false);
+  };
+
+  const checkProvider = async () => {
+    const provider = await detectEthereumProvider();
+    if (provider) {
+      checkChain();
+      onConnect();
+      onDisconnect();
+      getAccount();
+      onChangeAccount();
+    }
+    setProvider(provider);
   };
 
   useEffect(() => {
-    sayHello();
-    setTest();
+    checkProvider();
   }, []);
 
   return (
     <div className="App">
+      {" "}
       <Flex direction="column">
         <Box p="8">
           <Text
-            bgGradient="linear(to-l, #7928CA, #FF0080)"
+            bgGradient="linear(to-l, #00ff06, #000000)"
             bgClip="text"
             fontSize="6xl"
             fontWeight="extrabold"
           >
-            Styrigon Swap
+            Smart contract practice
           </Text>
         </Box>
-        <Spacer />
-        <Box p="4">
-          <Text fontSize="2x1" color="purple.400" noOfLines={3}>
-            Up to 90% of the trading commission is returned in STY tokens,{" "}
-            <br /> 10% is credited to your STY Boost. You can change the
-            percentage.
-          </Text>
+        <Box p="8">
+          <Stack>
+            <Text>
+              Connected on: <strong>{chain}</strong>
+            </Text>
+            <Text>
+              Account: <strong>{account}</strong>
+            </Text>
+          </Stack>
         </Box>
       </Flex>
-
-      <Flex>
-        <Spacer />
-        <Box boxShadow="xl" p="6" rounded="md" bg="white" w="35%">
-          <Tabs
-            variant="soft-rounded"
-            colorScheme="purple"
-            align="center"
-            isFitted
-          >
-            <TabList>
-              <Tab>Exchange</Tab>
-              <Tab>Liquidity</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <Exchange />
-              </TabPanel>
-              <TabPanel>
-                <p>Liquidity</p>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Box>
-        <Spacer />
-      </Flex>
+      {provider ? (
+        <>
+          {!isConnected ? (
+            <Button
+              colorScheme="teal"
+              variant="outline"
+              onClick={connectToMetamask}
+            >
+              Connect to metamask
+            </Button>
+          ) : (
+            <Tabs isFitted variant="enclosed" color="gray">
+              <TabList mb="1em">
+                <Tab>Fund me</Tab>
+                <Tab>Styrigon swap</Tab>
+                <Tab>Lottery</Tab>
+                <Tab>Withdraw</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Fundme account={account} />
+                </TabPanel>
+                <TabPanel>
+                  <Swap />
+                </TabPanel>
+                <TabPanel>
+                  <p>Lottery</p>
+                </TabPanel>
+                <TabPanel>
+                  <Withdraw />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          )}
+        </>
+      ) : (
+        <div>Need metamask</div>
+      )}
     </div>
   );
-}
+};
 
 export default App;

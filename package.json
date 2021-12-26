@@ -3,18 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chainlink/contracts": "^0.3.0",
     "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@metamask/detect-provider": "^1.2.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.5.2",
     "framer-motion": "^4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-scripts": "4.0.3",
+    "truffle-hdwallet-provider": "^1.0.17",
     "web-vitals": "^1.0.1",
     "web3": "^1.6.0"
   },
@@ -22,7 +27,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile-contract": "cd src/blockchain && truffle compile",
+    "deploy-contract-test": "cd src/blockchain && truffle migrate --network rinkeby",
+    "deploy-contract-dev": "cd src/blockchain && truffle migrate --network development"
   },
   "eslintConfig": {
     "extends": [

@@ -23,7 +23,7 @@ const Exchange = () => {
             <Text fontSize="18px" as="strong">
               Exchange
             </Text>
-            <Text color="pink" fontSize="14px">
+            <Text color="green" fontSize="14px">
               Trade tokens in an instant
             </Text>
           </Flex>
@@ -34,7 +34,7 @@ const Exchange = () => {
             as={MdSettings}
             w={6}
             h={6}
-            color="purple.400"
+            color="green.400"
             style={{ cursor: "pointer" }}
           />
         </Box>
@@ -65,7 +65,7 @@ const Exchange = () => {
             <Box p={2}>
               <Flex alignItems="center">
                 <Box mr="1">
-                  <Button colorScheme="purple" size="xs" variant="ghost">
+                  <Button colorScheme="green" size="xs" variant="ghost">
                     MAX
                   </Button>
                 </Box>
@@ -115,7 +115,7 @@ const Exchange = () => {
           w="40px"
           h="40px"
           m="4"
-          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          bgGradient="linear(to-l, #00ff06, #000000)"
           color="white"
         >
           <BiSortAlt2 />
