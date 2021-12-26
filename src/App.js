@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { useEffect, useState } from "react";
+import { version } from "../package.json";
 import "./App.css";
 import CHAINS from "./blockchain/chains/chains.json";
 import Fundme from "./tabs/fundme/Fundme";
@@ -31,7 +32,6 @@ const App = () => {
 
   const onConnect = () => {
     window.ethereum.on("connect", (info) => {
-      console.log("ON CONNECT");
       setChain(CHAINS[info.chainId]);
       setConnected(window.ethereum.isConnected());
     });
@@ -39,14 +39,13 @@ const App = () => {
 
   const onDisconnect = () => {
     window.ethereum.on("disconnect", (error) => {
-      console.log("ERROR..", error);
-      console.log("ON DISCONNECT");
+      //console.log("ERROR..", error);
+      //console.log("ON DISCONNECT");
     });
   };
 
   const checkChain = async () => {
     window.ethereum.on("chainChanged", (chainId) => {
-      console.log("CHAIN...", window.chain);
       window.location.reload();
     });
   };
@@ -54,7 +53,7 @@ const App = () => {
   const onChangeAccount = async () => {
     window.ethereum.on("accountsChanged", (accounts) => {
       setAccount(accounts[0]);
-      console.log("ACCOUNTS...", accounts);
+      setConnected(accounts.length > 0);
     });
   };
 
@@ -95,8 +94,9 @@ const App = () => {
           >
             Smart contract practice
           </Text>
+          <Text fontSize="sm">Version: {version}</Text>
         </Box>
-        {window.ethereum?.isConnected() && (
+        {isConnected && (
           <Box p="8">
             <Stack>
               <Text>

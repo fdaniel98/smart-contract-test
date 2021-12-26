@@ -37,6 +37,7 @@ const Fundme = () => {
 
   const handleFundMe = async () => {
     try {
+      window.ethereum.enable();
       const res = await fundMe(ethValue, (tx) => {
         setLoading(true);
         toast({
