@@ -1,16 +1,18 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.2;
+pragma solidity >=0.4.22 <0.9.0;
 
 import "./PriceConsumerV3.sol";
 
 contract SimpleStorage is PriceConsumerV3 {
-
     mapping(address => uint256) public users;
     address owner;
     address[] public funders;
 
-    constructor() {
+    address kovan = 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e;
+    address rinkeby = 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e;
+
+    constructor() public PriceConsumerV3(rinkeby) {
         owner = msg.sender;
     }
 

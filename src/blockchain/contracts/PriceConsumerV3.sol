@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity >=0.4.22 <0.9.0;
 
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 
 contract PriceConsumerV3 {
-    string NETWORK = "rinkeby";
+
     uint256 internal GWEI_DECIMAL = 100000000;
     uint256 internal WEI_DECIMAL = 1000000000000000000;
     uint256 internal minimum = (50 * 10**18) / WEI_DECIMAL;
-
-    mapping(string => address) private networks;
 
     AggregatorV3Interface internal priceFeed;
 
@@ -18,17 +16,14 @@ contract PriceConsumerV3 {
      * Aggregator: ETH/USD
      * Address: 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e
      */
-    constructor() {
-        networks["kovan"] = 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e;
-        networks["rinkeby"] = 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e;
-
-        priceFeed = AggregatorV3Interface(networks[NETWORK]);
+    constructor(address _account) public {
+        priceFeed = AggregatorV3Interface(_account);
     }
 
     /**
      * Returns the latest price
      */
-    function getLatestPrice() internal view returns (int256) {
+    function getLatestPrice() public view returns (int256) {
         (
             ,
             // uint80 roundID,

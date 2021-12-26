@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import SimpleStorage from "../blockchain/build/contracts/SimpleStorage.json";
 const contractABI = SimpleStorage.abi;
-const address = "0xba136Be8D8c9BCC1292F4f3Dc8C0899C57c571bD";
+const address = "0x82e3d64E63930c6fDE77A622bcf4cC238c388f85";
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
